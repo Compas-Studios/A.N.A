@@ -7,6 +7,7 @@ public class PlayerMovement : MonoBehaviour
     [SerializeField] private Transform _camSpace = default;
     [SerializeField] private float _rotSpeed = 2.0f;
     [SerializeField] private float _lookDist = 4.5f, looseRadius = 6.5f;
+    [SerializeField] private Joystick _joystick = default;
     public float _moveSpeed = 5.0f;
     Vector3 _direccion = default, _lastdir = default;
     List<Lookable> misLookables;
@@ -34,8 +35,7 @@ public class PlayerMovement : MonoBehaviour
     /// <returns>normalized Vector2</returns>
     Vector3 InputsMovil() 
     {
-        Vector2 inputfinal;
-        inputfinal = Input.touches[0].position;
+        Vector3 inputfinal = new Vector3(_joystick.Horizontal, 0, _joystick.Vertical);
         return inputfinal;
     }
 
@@ -67,7 +67,7 @@ public class PlayerMovement : MonoBehaviour
 
     private void Update() 
     {
-        _direccion = InputsTeclas();
+        _direccion = InputsMovil();
         _lastdir = _direccion.sqrMagnitude > 0.01f ? _direccion : _lastdir;
 
         if (_currLook)
