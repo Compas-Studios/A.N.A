@@ -95,17 +95,6 @@ public class PlayerMovement : MonoBehaviour
         _rBody.MovePosition(_tr.position + (_direccion * Time.fixedDeltaTime * _moveSpeed));
     }
 
-    private void OnDrawGizmos() {
-        Gizmos.color = Color.white;
-
-        if (_currLook!=null)
-        Gizmos.DrawWireSphere(_currLook._trans.position, 1);
-
-        Gizmos.color = Color.blue;
-        if(_tr!=null)
-        Gizmos.DrawWireSphere(_tr.position, _lookDist);
-    }
-
     Lookable getNearestTarget() 
     {
         Lookable nearest = null;
@@ -126,4 +115,16 @@ public class PlayerMovement : MonoBehaviour
         }
         return nearest;
     }
+
+    /*
+      private void OnDrawGizmos() {
+        Gizmos.color = Color.white;
+
+        if (_currLook!=null)
+        Gizmos.DrawWireSphere(_currLook._trans.position, 1);
+
+        Gizmos.color = Color.blue;
+        if(_tr!=null)
+        Gizmos.DrawWireSphere(_tr.position, _lookDist);
+    }*/
 }
