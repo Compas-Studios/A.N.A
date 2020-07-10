@@ -8,7 +8,6 @@ public class ShootScript : MonoBehaviour
     public Transform puntoSpawn = default;
     public float shootDelay = 0.5f;
     bool isShooting = false, canShoot = true;
-
     WaitForSeconds seconds;
 
     private void Start() {
@@ -32,7 +31,7 @@ public class ShootScript : MonoBehaviour
         {
             canShoot = false;
             Bullet bullet = miPool.GetPooledObject("bullet").GetComponent<Bullet>();
-            bullet.Disparar(puntoSpawn.position, puntoSpawn.forward);
+            bullet.Disparar(puntoSpawn.position, puntoSpawn.forward, 25f);
             StartCoroutine(waitToShoot());
         }
     }
