@@ -3,7 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class basicThug : MonoBehaviour
+public class basicThug : MonoBehaviour, IDamageable
 {
     [SerializeField] private Transform _ShootPoint = default;
     public float moveRadius = 5.0f;
@@ -22,7 +22,7 @@ public class basicThug : MonoBehaviour
     private void Awake() 
     {
         _trans = transform;
-        _playerTrans = FindObjectOfType<PlayerMovement>().transform;
+        _playerTrans = FindObjectOfType<PlayerMovement>().transform; //Encontrar Transform del Jugador
         _gobj = gameObject;
         _rb = GetComponent<Rigidbody>();
         seconds = new WaitForSeconds(secondsToShoot);
@@ -51,6 +51,7 @@ public class basicThug : MonoBehaviour
     private void Atacar() 
     {
         if (playerDirection.sqrMagnitude > (detectRadius * detectRadius) * 1.2f) { //si esta fuera del radio de deteccion con 20% mas
+            endPos = _playerTrans.position; //ve al ultimo punto
             jugadorVisto = false; //detectao
             return;
         }
@@ -97,9 +98,7 @@ public class basicThug : MonoBehaviour
         canShoot = true;
     }
 
-    private void OnDrawGizmos() {
-        if (_trans != null) {
-            Gizmos.DrawSphere(_trans.position, detectRadius);
-        }
+    public void TakeDmg() {
+        print("auch");
     }
 }

@@ -33,10 +33,11 @@ public class Bullet : MonoBehaviour
     }
     private void OnTriggerEnter(Collider other) 
     {
-        /*if (other.CompareTag("Damageable")) 
-        {
-            
-        }*/
+        IDamageable damageable = other.GetComponent<IDamageable>();
+    
+        if (damageable != null)
+            damageable.TakeDmg();
+
         _yo.SetActive(false);
     }
 
