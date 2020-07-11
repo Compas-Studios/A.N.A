@@ -14,14 +14,20 @@ public class ShootScript : MonoBehaviour, IDamageable
 
     float health;
     ObjectPooler miPool = default;
-    bool isShooting = false, canShoot = true;
-    WaitForSeconds seconds;
+    bool isShooting = false, canShoot = true, canDamage = true;
+    WaitForSeconds shootSeconds, invinSeconds;
+
+    CamShake _cam = default;
+
 
     private void Start() 
     {
         miPool = ObjectPooler.SharedInstance;
-        seconds = new WaitForSeconds(shootDelay);
+        shootSeconds = new WaitForSeconds(shootDelay);
+        invinSeconds = new WaitForSeconds(1.5f);
         health = MaxHealth;
+
+        _cam = CamShake._staticShake;
     }
 
     public void HoldDisparo() => isShooting = true;
@@ -40,20 +46,31 @@ public class ShootScript : MonoBehaviour, IDamageable
         {
             canShoot = false;
             Bullet bullet = miPool.GetPooledObject("bullet").GetComponent<Bullet>();
-            bullet.Disparar(puntoSpawn.position, puntoSpawn.forward, 25f);
+            bullet.Disparar(puntoSpawn.position, puntoSpawn.forward, 25f, false);
             StartCoroutine(waitToShoot());
         }
     }
 
     IEnumerator waitToShoot() 
     {
-        yield return seconds;
+        yield return shootSeconds;
         canShoot = true;
     }
 
-    public void TakeDmg() 
+    IEnumerator waitToDamage()
     {
-        
+        yield return invinSeconds;
+        canDamage = true;
+    }
+
+    public void TakeDmg(bool _b) 
+    {
+        if (!_b  || !canDamage)
+            return;
+
+        canDamage = false;
+        StartCoroutine(waitToDamage());
+
         health -= 10;
         if (health <= 0) {
             health = 0;
@@ -68,6 +85,8 @@ public class ShootScript : MonoBehaviour, IDamageable
             allHealth.rectTransform.DOShakePosition(0.2f, 10f, 5, 90,false,false);
             bckgndhealth.DOFillAmount(convertedvalue, 1f).SetEase(Ease.InOutExpo);
         }
+
+        if (_cam != null) _cam.Shake(0.2f, 5.0f);
     }
 
     private void Die() {

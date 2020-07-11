@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class Bullet : MonoBehaviour
 {
+    bool _enemie = false;
     GameObject _yo;
     Transform _tr;
     Rigidbody _rg;
@@ -16,16 +17,18 @@ public class Bullet : MonoBehaviour
         _rg = GetComponent<Rigidbody>();
     }
 
-    public void Disparar(Vector3 pos,Vector3 direccion) 
+    public void Disparar(Vector3 pos,Vector3 direccion, bool _ene) 
     {
+        _enemie = _ene;
         _tr.position = pos;
         _rg.velocity = Vector3.zero;
         _tr.rotation = Quaternion.LookRotation(direccion);
         _rg.AddForce(direccion * velocidad,ForceMode.VelocityChange);
     }
 
-    public void Disparar(Vector3 pos, Vector3 direccion, float vel) 
+    public void Disparar(Vector3 pos, Vector3 direccion, float vel,bool _ene) 
     {
+        _enemie = _ene;
         _tr.position = pos;
         _rg.velocity = Vector3.zero;
         _tr.rotation = Quaternion.LookRotation(direccion);
@@ -36,7 +39,7 @@ public class Bullet : MonoBehaviour
         IDamageable damageable = other.GetComponent<IDamageable>();
     
         if (damageable != null)
-            damageable.TakeDmg();
+            damageable.TakeDmg(_enemie);
 
         _yo.SetActive(false);
     }

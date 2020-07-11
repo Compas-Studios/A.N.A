@@ -87,8 +87,6 @@ public class PlayerMovement : MonoBehaviour
                 _currLook = null;
             }
         }
-
-        
     }
 
     private void FixedUpdate() {
@@ -116,15 +114,10 @@ public class PlayerMovement : MonoBehaviour
         return nearest;
     }
 
-    /*
-      private void OnDrawGizmos() {
-        Gizmos.color = Color.white;
 
-        if (_currLook!=null)
-        Gizmos.DrawWireSphere(_currLook._trans.position, 1);
-
-        Gizmos.color = Color.blue;
-        if(_tr!=null)
-        Gizmos.DrawWireSphere(_tr.position, _lookDist);
-    }*/
+    public Vector3 getDireccion() //obtener la direccion a la que va o sino el frente del personaje
+    {
+        Vector3 direc = _direccion.sqrMagnitude > 0.01f? _direccion.normalized : _tr.forward;
+        return direc;
+    }
 }

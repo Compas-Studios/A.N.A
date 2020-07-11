@@ -6,6 +6,7 @@ using UnityEngine;
 public class basicThug : MonoBehaviour, IDamageable
 {
     [SerializeField] private Transform _ShootPoint = default;
+    [SerializeField, Range(1, 10)] int maxLife = 5;
     public float moveRadius = 5.0f;
     public float moveSpeed = 3.0f;
     public float detectRadius = 5.0f;
@@ -16,8 +17,11 @@ public class basicThug : MonoBehaviour, IDamageable
     GameObject _gobj;
     ObjectPooler miPool;
     bool jugadorVisto = false, canShoot = true;
+    int life;
 
     WaitForSeconds seconds;
+
+    CamShake cam;
 
     private void Awake() 
     {
@@ -32,6 +36,8 @@ public class basicThug : MonoBehaviour, IDamageable
     {
         endPos = GetMovePos();
         miPool = ObjectPooler.SharedInstance;
+        cam = CamShake._staticShake;
+        life = maxLife;
     }
 
     private void Update() 
@@ -65,7 +71,7 @@ public class basicThug : MonoBehaviour, IDamageable
         if (canShoot) {
             canShoot = false;
             Bullet bullet = miPool.GetPooledObject("bullet").GetComponent<Bullet>();
-            bullet.Disparar(_ShootPoint.position, _ShootPoint.forward, 10.0f);
+            bullet.Disparar(_ShootPoint.position, _ShootPoint.forward, 10.0f, true);
             StartCoroutine(waitToShoot());
         }
     }
@@ -98,8 +104,19 @@ public class basicThug : MonoBehaviour, IDamageable
         canShoot = true;
     }
 
-    public void TakeDmg() 
+    public void TakeDmg(bool enemiga) 
     {
-        
+        if (enemiga)
+            return;
+        life -= 1;
+        if (life <= 0)
+            Die();
+    }
+
+    private void Die()
+    {
+        life = maxLife;
+        if (cam != null) cam.Shake(0.1f, 2.5f); //sacude la camara papi
+        gameObject.SetActive(false); //apagate
     }
 }
