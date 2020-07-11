@@ -56,9 +56,9 @@ public class basicThug : MonoBehaviour, IDamageable
             return;
         }
 
-        Disparar();
-
         _trans.rotation = Quaternion.LookRotation(playerDirection);
+
+        Disparar();
     }
 
     void Disparar() {
@@ -98,7 +98,8 @@ public class basicThug : MonoBehaviour, IDamageable
         canShoot = true;
     }
 
-    public void TakeDmg() {
-        print("auch");
+    public void TakeDmg() 
+    {
+        
     }
 }
