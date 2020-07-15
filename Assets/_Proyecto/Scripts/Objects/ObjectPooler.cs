@@ -22,18 +22,20 @@ public class ObjectPooler : MonoBehaviour
             SharedInstance = this;
         else
             Destroy(gameObject);
-    }
 
-    void Start() {
+        //Inicializamos
         pooledObjects = new List<GameObject>();
-        foreach (ObjectPoolItem item in itemsToPool) {
-            for (int i = 0; i < item.cantidad; i++) {
+        foreach (ObjectPoolItem item in itemsToPool)
+        {
+            for (int i = 0; i < item.cantidad; i++)
+            {
                 GameObject obj = (GameObject)Instantiate(item.objeto);
                 obj.SetActive(false);
                 pooledObjects.Add(obj);
             }
         }
     }
+
 
     public GameObject GetPooledObject(string tag) {
         for (int i = 0; i < pooledObjects.Count; i++) {

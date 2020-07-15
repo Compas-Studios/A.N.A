@@ -11,6 +11,7 @@ public class PlayerMovement : MonoBehaviour
     public float _moveSpeed = 5.0f;
     Vector3 _direccion = default, _lastdir = default;
     List<Lookable> misLookables;
+    GameObject _currentLookGo;
     Lookable _currLook;
     Rigidbody _rBody = default;
     Transform _tr = default;
@@ -79,10 +80,18 @@ public class PlayerMovement : MonoBehaviour
 
         if (_currLook == null) {
             _currLook = getNearestTarget();
+            _currentLookGo = _currLook? _currLook.gameObject : null;
         } 
         else 
         {
-            if((_currLook._trans.position - _tr.position).sqrMagnitude > looseRadius * looseRadius) 
+            if (_currentLookGo.activeSelf == false)
+            {
+                _currLook = null;
+                _currentLookGo = null;
+                return;
+            }
+                
+            if ((_currLook._trans.position - _tr.position).sqrMagnitude > looseRadius * looseRadius) 
             {
                 _currLook = null;
             }
@@ -114,6 +123,13 @@ public class PlayerMovement : MonoBehaviour
         return nearest;
     }
 
+    public void AddToLookable(Lookable _newLookable)
+    {
+        if (!misLookables.Contains(_newLookable))
+        {
+            misLookables.Add(_newLookable);
+        }
+    }
 
     public Vector3 getDireccion() //obtener la direccion a la que va o sino el frente del personaje
     {

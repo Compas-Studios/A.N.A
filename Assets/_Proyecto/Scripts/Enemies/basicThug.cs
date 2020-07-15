@@ -117,6 +117,7 @@ public class basicThug : MonoBehaviour, IDamageable
     {
         life = maxLife;
         if (cam != null) cam.Shake(0.1f, 2.5f); //sacude la camara papi
+        _trans.position = _trans.position + Vector3.up * 20.0f;
         gameObject.SetActive(false); //apagate
     }
 }

@@ -5,14 +5,14 @@ using DG.Tweening;
 
 public class DashHandler : MonoBehaviour
 {
-    [SerializeField] Renderer[] beginDashRenderers = default;
-    [SerializeField] Renderer[] endDashRenderers = default;
-    [SerializeField] TrailRenderer trail = default;
+    [SerializeField] Renderer[] DashRenderers = default;
+    [SerializeField] int dashModels = 5;
     public float dashMaxDistance = 3f;
     PlayerMovement playerMove;
     Vector3 newPos = default;
     Vector3 heading = default;
-    Transform _tr = default, _parentBeginObj = default, _parentEndObj;
+    Transform _tr = default;
+    Transform[] parentTransRend = default;
     bool canDash = true;
 
     WaitForSeconds seconds, trailseconds;
@@ -28,16 +28,23 @@ public class DashHandler : MonoBehaviour
         seconds = new WaitForSeconds(0.9f);
         trailseconds = new WaitForSeconds(0.1f);
         propertyId = Shader.PropertyToID("_transitionValue");
-
+        parentTransRend = new Transform[dashModels];
+        DashRenderers = new Renderer[dashModels * 2];
+        mtpBlock = new MaterialPropertyBlock();
     }
 
     private void Start()
     {
-        if (beginDashRenderers[0] != null)
-            _parentBeginObj = beginDashRenderers[0].transform.parent;
 
-        if (endDashRenderers[0] != null)
-            _parentEndObj = endDashRenderers[0].transform.parent;
+        for (int i = 0; i < dashModels; i++)
+        {
+            parentTransRend[i] = ObjectPooler.SharedInstance.GetPooledObject("DashModel").transform;
+            Renderer[] renderers = parentTransRend[i].GetComponentsInChildren<Renderer>();
+            DashRenderers[i * 2] = renderers[0];
+            DashRenderers[(i * 2) + 1] = renderers[1];
+        }
+
+        disableMat(); //apagalos a todos
 
         cam = CamShake._staticShake;
     }
@@ -58,47 +65,47 @@ public class DashHandler : MonoBehaviour
         else
             newPos = _tr.position + (heading * dashMaxDistance); //sino nos moveremos la distancia maxima de nuestro dash
 
-        if (_parentBeginObj != null)
+        float dist = 1.0f / dashModels;
+        float t = 0.0f;
+
+        for (int i = 0; i < parentTransRend.Length; i++)
         {
-            _parentBeginObj.position = _tr.position; //pongo el modelo del fade en el lugar  (si existe)
-            _parentBeginObj.rotation = transform.rotation;
-        }
+            parentTransRend[i].gameObject.SetActive(true); //prendelos a todos 
+            parentTransRend[i].rotation = _tr.rotation;
+            parentTransRend[i].position = Vector3.Lerp(_tr.position, newPos, t);
+            t += dist;
+        }   
 
-        if(trail!=null) trail.emitting = true;
-
-        /*===========================EFECTOS===========================*/
-        foreach (Renderer r in beginDashRenderers)
-        {
-            r.material.SetFloat(propertyId, 1);
-            r.material.DOFloat(0, propertyId, 1.0f);
-        }
-
-        foreach (Renderer r in endDashRenderers)
-        {
-            r.material.SetFloat(propertyId, 1);
-            r.material.DOFloat(0, propertyId, 1.0f);
-        }
-        /*============================================================*/
-
+        DOTween.To(updateMaterial, 1, 0, 1.0f).OnComplete(disableMat);//Funcion encargada de hacerlos transparentes y desactivarlos al terminar
+        
         _tr.position = newPos; //movemos
 
         if (cam != null) cam.Shake(0.1f, 1.0f); //sacude la camara papi
 
-        if (_parentEndObj != null)
+    }
+
+    void updateMaterial(float _tValue)
+    {
+        /*===========================EFECTOS===========================*/
+        foreach (Renderer r in DashRenderers)
         {
-            _parentEndObj.position = _tr.position; //pongo el modelo del fade en el lugar  (si existe)
-            _parentEndObj.rotation = transform.rotation;
+            mtpBlock.SetFloat(propertyId, _tValue);
+            r.SetPropertyBlock(mtpBlock);
         }
-        
+        /*============================================================*/
+    }
+
+    void disableMat()
+    {
+        foreach(Transform t in parentTransRend)
+        {
+            t.gameObject.SetActive(false);
+        }
     }
 
     IEnumerator waitToDash()
     {
-        yield return trailseconds;
-        if (trail != null) trail.emitting = false;
-
         yield return seconds;
         canDash = true;
-        
     }
 }

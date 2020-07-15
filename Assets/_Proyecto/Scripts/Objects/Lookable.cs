@@ -5,7 +5,7 @@ using UnityEngine;
 public class Lookable : MonoBehaviour
 {
     public int _priority = 1;
-    public Transform _trans;
+    [HideInInspector]public Transform _trans;
 
     private void Awake() 
     {
