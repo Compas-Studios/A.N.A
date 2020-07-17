@@ -12,6 +12,7 @@ public class LouisBoss : MonoBehaviour, IDamageable
     ObjectPooler _pool = default;
     bool  isAlive = true, isBusy = false;
     int estado = 0; //idle, atacando, moviendo
+    float shootRadius = 5f;
 
     private void Awake()
     {
@@ -54,13 +55,13 @@ public class LouisBoss : MonoBehaviour, IDamageable
     void Atacar()
     {
         _anim.SetTrigger("Attack");
+        StartCoroutine(AttackRoutine(4.0f));
         StartCoroutine(waitTillNoBussy(4.5f));
     }
 
     void ChangePosition()
     {
         _anim.SetTrigger("Attack");
-       // print("startingJump");
         Vector3 newPos = new Vector3(Random.Range(-limitesXY.x, limitesXY.x), _tr.position.y, Random.Range(-limitesXY.y, limitesXY.y));
         _target.DOMove(newPos, 0.2f).SetEase(Ease.OutExpo);
         _tr.DOLocalJump(newPos, 5f, 1, 0.15f, false).SetDelay(3.0f);
@@ -79,8 +80,49 @@ public class LouisBoss : MonoBehaviour, IDamageable
         isBusy = false;
     }
 
+    IEnumerator AttackRoutine(float _l)
+    {
+        float halfTime = _l / 2;
+        
+        yield return new WaitForSeconds(halfTime);
+        Vector3 direccionPlayer = (_trPlayer.position - _tr.position);
+        direccionPlayer = Vector3.ClampMagnitude(direccionPlayer, shootRadius);
+        direccionPlayer.y = 0;
+        Debug.DrawLine(_tr.position, _tr.position + direccionPlayer, Color.cyan, 5.0f);
+        Bullet bullet;
+
+        for (int i = 0; i < 16; i++)
+        {
+            bullet = _pool.GetPooledObject("bullet").GetComponent<Bullet>();
+            //Debug.DrawLine(_tr.position + direccionPlayer , _tr.position + direccionPlayer.normalized , Color.magenta, 3.0f);
+            bullet.Disparar(_tr.position + direccionPlayer , direccionPlayer.normalized , 12.0f, true);
+            direccionPlayer = Quaternion.Euler(0,-22.5f,0) * direccionPlayer;
+        }
+
+        yield return new WaitForSeconds(halfTime);
+        direccionPlayer = (_trPlayer.position - _tr.position);
+        direccionPlayer = Vector3.ClampMagnitude(direccionPlayer, shootRadius);
+        direccionPlayer.y = 0;
+        Debug.DrawLine(_tr.position, _tr.position + direccionPlayer, Color.cyan, 5.0f);
+
+        for (int i = 0; i < 16; i++)
+        {
+            bullet = _pool.GetPooledObject("bullet").GetComponent<Bullet>();
+            //Debug.DrawLine(_tr.position + direccionPlayer , _tr.position + direccionPlayer.normalized , Color.magenta, 3.0f);
+            bullet.Disparar(_tr.position + direccionPlayer, direccionPlayer.normalized, 16.0f, true);
+            direccionPlayer = Quaternion.Euler(0, -22.5f, 0) * direccionPlayer;
+        }
+
+    }
+
     public void TakeDmg(bool _enemie)
     {
         
+    }
+
+    private void OnDrawGizmos()
+    {
+        if (_tr != null)
+            Gizmos.DrawWireSphere(_tr.position, shootRadius);
     }
 }
