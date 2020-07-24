@@ -35,7 +35,6 @@ public class DashHandler : MonoBehaviour
 
     private void Start()
     {
-
         for (int i = 0; i < dashModels; i++)
         {
             parentTransRend[i] = ObjectPooler.SharedInstance.GetPooledObject("DashModel").transform;
