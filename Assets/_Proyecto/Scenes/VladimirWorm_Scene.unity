@@ -98,7 +98,7 @@ LightmapSettings:
     m_TrainingDataDestination: TrainingData
     m_LightProbeSampleCountMultiplier: 4
   m_LightingDataAsset: {fileID: 0}
-  m_UseShadowmask: 0
+  m_UseShadowmask: 1
 --- !u!196 &4
 NavMeshSettings:
   serializedVersion: 2
@@ -41710,6 +41710,16 @@ PrefabInstance:
       propertyPath: targetToLook
       value: 
       objectReference: {fileID: 554994445}
+    - target: {fileID: 3695502482697100452, guid: d29af985e4e0147478607a88d082e904,
+        type: 3}
+      propertyPath: offset.y
+      value: 25
+      objectReference: {fileID: 0}
+    - target: {fileID: 3695502482697100452, guid: d29af985e4e0147478607a88d082e904,
+        type: 3}
+      propertyPath: offset.z
+      value: -15
+      objectReference: {fileID: 0}
     - target: {fileID: 3695502482697100463, guid: d29af985e4e0147478607a88d082e904,
         type: 3}
       propertyPath: m_Name
@@ -41791,6 +41801,36 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8171349583177672725, guid: 76b1c786afda47a40834b709a645a608,
+        type: 3}
+      propertyPath: InitialModule.startSize.scalar
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 8171349583177672725, guid: 76b1c786afda47a40834b709a645a608,
+        type: 3}
+      propertyPath: InitialModule.startSize.minScalar
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8171349583177672725, guid: 76b1c786afda47a40834b709a645a608,
+        type: 3}
+      propertyPath: EmissionModule.rateOverTime.scalar
+      value: 500
+      objectReference: {fileID: 0}
+    - target: {fileID: 8171349583177672725, guid: 76b1c786afda47a40834b709a645a608,
+        type: 3}
+      propertyPath: InitialModule.startColor.maxColor.a
+      value: 0.003921569
+      objectReference: {fileID: 0}
+    - target: {fileID: 8171349583177672727, guid: 76b1c786afda47a40834b709a645a608,
+        type: 3}
+      propertyPath: m_LocalPosition.x
+      value: -41.1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8171349583177672727, guid: 76b1c786afda47a40834b709a645a608,
+        type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 18.9
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 76b1c786afda47a40834b709a645a608, type: 3}
@@ -42085,6 +42125,12 @@ PrefabInstance:
       propertyPath: m_FillAmount
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 119749284200244767, guid: c07ab423e975911498b5f2c4064d6acd,
+        type: 3}
+      propertyPath: m_Sprite
+      value: 
+      objectReference: {fileID: 21300000, guid: a181e5e8e9030f947a9d220e43c3919e,
+        type: 3}
     - target: {fileID: 272147936527686858, guid: c07ab423e975911498b5f2c4064d6acd,
         type: 3}
       propertyPath: m_AnchoredPosition.x
@@ -42095,6 +42141,12 @@ PrefabInstance:
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
       value: 
       objectReference: {fileID: 554994446}
+    - target: {fileID: 7054593109852385476, guid: c07ab423e975911498b5f2c4064d6acd,
+        type: 3}
+      propertyPath: m_Sprite
+      value: 
+      objectReference: {fileID: 21300000, guid: ae0d73ee3b444914381563103cfd13aa,
+        type: 3}
     - target: {fileID: 8004204785221365641, guid: c07ab423e975911498b5f2c4064d6acd,
         type: 3}
       propertyPath: m_Delegates.Array.data[0].callback.m_PersistentCalls.m_Calls.Array.data[0].m_Target

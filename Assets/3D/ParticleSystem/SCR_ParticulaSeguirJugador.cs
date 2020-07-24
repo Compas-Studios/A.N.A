@@ -12,6 +12,6 @@ public class SCR_ParticulaSeguirJugador : MonoBehaviour
 
     void Update()
     {
-        transform.position = new Vector3(bar.position.x,bar.position.y, bar.position.z);
+        transform.position = new Vector3(bar.position.x, transform.position.y, bar.position.z);
     }
 }
