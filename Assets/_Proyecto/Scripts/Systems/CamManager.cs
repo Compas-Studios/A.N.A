@@ -7,7 +7,6 @@ public class CamManager : MonoBehaviour
     public static CamManager camanInstance = default;
     SCR_CameraFollow micam = default;
     Transform camTr = default;
-    Vector3 lastCamPos = default;
     private void Awake()
     {
         if(camanInstance == null)

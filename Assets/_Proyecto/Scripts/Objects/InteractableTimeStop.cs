@@ -5,7 +5,7 @@ using UnityEngine;
 [RequireComponent(typeof(Collider))]
 public class InteractableTimeStop : MonoBehaviour, IInteractuable
 {
-    public bool canStopTime = true, hasCamPos = false, oneUse =false;
+    public bool canStopTime = true, hasCamPos = false, oneUse = false;
     [SerializeField] Vector3 targetPos = Vector3.zero, camPos = Vector3.zero;
     MonoBehaviour _activador;
 
@@ -16,6 +16,7 @@ public class InteractableTimeStop : MonoBehaviour, IInteractuable
 
         TextRevealer.txtInstance.MostrarInputs(false);
         TextRevealer.txtInstance.SetActivator(this);
+        TextRevealer.txtInstance.mostrarCurrentLevel();
         if (hasCamPos)
         CamManager.camanInstance.moveToPos(transform.position + camPos, transform.position + targetPos, 0.5f);
 

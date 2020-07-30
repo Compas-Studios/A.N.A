@@ -5,14 +5,15 @@ using UnityEngine;
 
 public class TextRevealer : MonoBehaviour
 {
+    public GameObject UserInputs = default;
+    public GameObject DialogInputs = default;
+    public LevelLoadSystem levLoad = default;
     public static TextRevealer txtInstance = default;
     [SerializeField] TextMeshProUGUI textDisplayer = default;
     public float timePerChar = 0.01f;
-    public bool terminado = false, terminadosMensajes = true;
+    [HideInInspector]public bool terminado = false, terminadosMensajes = true;
     WaitForSecondsRealtime secondsPerChar;
     bool continuar = false;
-    public GameObject UserInputs = default;
-    public GameObject DialogInputs = default;
 
     //bufferMensajes
     string[] bufferString = default;
@@ -92,6 +93,7 @@ public class TextRevealer : MonoBehaviour
 
     public void MostrarTexto(string mensaje = "default")
     {
+        StopAllCoroutines();
         StartCoroutine(RutinaTexto(mensaje));
     }
 
@@ -109,5 +111,11 @@ public class TextRevealer : MonoBehaviour
     {
         UserInputs.SetActive(mostrar);
         DialogInputs.SetActive(!mostrar);
+    }
+
+    public void mostrarCurrentLevel()
+    {
+        if (levLoad != null)
+            levLoad.RevealCurrent();
     }
 }
