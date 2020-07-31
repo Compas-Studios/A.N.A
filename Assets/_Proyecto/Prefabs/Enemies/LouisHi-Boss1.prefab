@@ -377,7 +377,7 @@ SpriteRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_Sprite: {fileID: 21300000, guid: 5eda94a9dcf71e445ad17e3c065d1460, type: 3}
-  m_Color: {r: 1, g: 0, b: 0, a: 1}
+  m_Color: {r: 1, g: 0, b: 0, a: 0}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
@@ -431,7 +431,7 @@ BoxCollider:
   m_IsTrigger: 0
   m_Enabled: 1
   serializedVersion: 2
-  m_Size: {x: 1, y: 1, z: 1}
+  m_Size: {x: 1, y: 1.5913984, z: 1}
   m_Center: {x: 0, y: 0, z: 0}
 --- !u!114 &2004612183367263068
 MonoBehaviour:
@@ -462,6 +462,8 @@ MonoBehaviour:
   limitesXY: {x: 11, y: 11}
   _anim: {fileID: 2004612182607367691}
   _target: {fileID: 2004612182452204647}
+  spRend: {fileID: 2004612182452204644}
+  rend: {fileID: 2810679813062315890}
 --- !u!1 &2520267359476618529
 GameObject:
   m_ObjectHideFlags: 0
@@ -1094,7 +1096,7 @@ SkinnedMeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: f53479888353b89498629ce1eb724500, type: 2}
+  - {fileID: 2100000, guid: 258593150f1540345ae2611abcdeec66, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -1258,7 +1260,7 @@ Animator:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 7561611114767043837}
-  m_Enabled: 0
+  m_Enabled: 1
   m_Avatar: {fileID: 0}
   m_Controller: {fileID: 9100000, guid: 1d1c0f967d52ab54c9f091af0a7cd3d6, type: 2}
   m_CullingMode: 0

@@ -2,28 +2,46 @@
 using System.Collections.Generic;
 using UnityEngine;
 using DG.Tweening;
+using UnityEngine.UI;
 
 public class LouisBoss : MonoBehaviour, IDamageable
 {
-    [SerializeField] Vector2 limitesXY = default;
+    [SerializeField] Vector4 limitesXY = default;
     [SerializeField] Animator _anim = default;
     [SerializeField] Transform _target = default;
+    [SerializeField] SpriteRenderer spRend = default;
+    [SerializeField] Renderer rend = default;
+    public float health = 0, maxHealth = 100;
     Transform _tr = default, _trPlayer = default;
     ObjectPooler _pool = default;
     bool  isAlive = true, isBusy = false;
     int estado = 0; //idle, atacando, moviendo
     float shootRadius = 5f;
 
+    Image healthImg;
+    MaterialPropertyBlock mtpb = default;
+    int matProperty;
+
     private void Awake()
     {
         _tr = transform.parent.parent;
         _trPlayer = FindObjectOfType<PlayerMovement>().transform;
+
+        mtpb = new MaterialPropertyBlock();
+        matProperty = Shader.PropertyToID("_transition");
     }
 
     private void Start()
     {
         _pool = ObjectPooler.SharedInstance;
         _target.parent = null;
+        health = maxHealth;
+        CanvasGroup cg = GameObject.FindGameObjectWithTag("bgndUI").GetComponent<CanvasGroup>();
+        if (cg != null)
+        {
+            cg.DOFade(1, 1.0f);
+            healthImg = cg.transform.GetChild(0).GetComponent<Image>();
+        }
     }
 
     private void Update()
@@ -62,7 +80,9 @@ public class LouisBoss : MonoBehaviour, IDamageable
     void ChangePosition()
     {
         _anim.SetTrigger("Attack");
-        Vector3 newPos = new Vector3(Random.Range(-limitesXY.x, limitesXY.x), _tr.position.y, Random.Range(-limitesXY.y, limitesXY.y));
+        spRend.DOFade(1, 0.5f);
+        spRend.DOFade(0, 0.5f).SetDelay(1.1f);
+        Vector3 newPos = new Vector3(Random.Range(limitesXY.x, limitesXY.y), _tr.position.y, Random.Range(limitesXY.z, limitesXY.w));
         _target.DOMove(newPos, 0.2f).SetEase(Ease.OutExpo);
         _tr.DOLocalJump(newPos, 5f, 1, 0.15f, false).SetDelay(3.0f);
         StartCoroutine(waitTillNoBussy(4.5f));
@@ -70,8 +90,12 @@ public class LouisBoss : MonoBehaviour, IDamageable
 
     void Morir()
     {
-        _anim.SetTrigger("Dead");
-        isAlive = false;
+        if (isAlive)
+        {
+            StopAllCoroutines();
+            _anim.SetTrigger("Dead");
+            isAlive = false;
+        }
     }
 
     IEnumerator waitTillNoBussy(float _t)
@@ -117,7 +141,26 @@ public class LouisBoss : MonoBehaviour, IDamageable
 
     public void TakeDmg(bool _enemie)
     {
-        
+        DOTween.To(updateMaterial, 0.75f, 0, 0.1f);
+
+        health -= 1;
+        if (health <= 0)
+        {
+            Morir();
+        }
+
+        float convertedvalue = health / maxHealth;
+
+        if (healthImg != null)
+        {
+            healthImg.DOFillAmount(convertedvalue, 0.01f).SetEase(Ease.InOutExpo);
+        }
+    }
+
+    void updateMaterial(float _t)
+    {
+        mtpb.SetFloat(matProperty, _t);
+        rend.SetPropertyBlock(mtpb); 
     }
 
     private void OnDrawGizmos()

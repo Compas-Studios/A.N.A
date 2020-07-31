@@ -98,7 +98,7 @@ LightmapSettings:
     m_TrainingDataDestination: TrainingData
     m_LightProbeSampleCountMultiplier: 4
   m_LightingDataAsset: {fileID: 0}
-  m_UseShadowmask: 0
+  m_UseShadowmask: 1
 --- !u!196 &4
 NavMeshSettings:
   serializedVersion: 2
@@ -214,6 +214,11 @@ PrefabInstance:
       propertyPath: _joystick
       value: 
       objectReference: {fileID: 1608940455}
+    - target: {fileID: 5431682880789349484, guid: b50af5f1d10dd8343ac65f16141827d9,
+        type: 3}
+      propertyPath: looseRadius
+      value: 12
+      objectReference: {fileID: 0}
     - target: {fileID: 5431682880789349486, guid: b50af5f1d10dd8343ac65f16141827d9,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -780,20 +785,25 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
-    - target: {fileID: 2004612182607367691, guid: c9addb64045a65b4c887d07fa207216a,
+    - target: {fileID: 2004612183367263069, guid: c9addb64045a65b4c887d07fa207216a,
         type: 3}
-      propertyPath: m_Enabled
-      value: 1
+      propertyPath: maxHealth
+      value: 100
       objectReference: {fileID: 0}
-    - target: {fileID: 2004612183367263066, guid: c9addb64045a65b4c887d07fa207216a,
+    - target: {fileID: 2004612183367263069, guid: c9addb64045a65b4c887d07fa207216a,
         type: 3}
-      propertyPath: m_Size.y
-      value: 1.5913984
+      propertyPath: limitesXY.x
+      value: -11
       objectReference: {fileID: 0}
-    - target: {fileID: 2004612183367263066, guid: c9addb64045a65b4c887d07fa207216a,
+    - target: {fileID: 2004612183367263069, guid: c9addb64045a65b4c887d07fa207216a,
         type: 3}
-      propertyPath: m_Center.y
-      value: 0
+      propertyPath: limitesXY.z
+      value: -11
+      objectReference: {fileID: 0}
+    - target: {fileID: 2004612183367263069, guid: c9addb64045a65b4c887d07fa207216a,
+        type: 3}
+      propertyPath: limitesXY.w
+      value: 11
       objectReference: {fileID: 0}
     - target: {fileID: 6821656999701462766, guid: c9addb64045a65b4c887d07fa207216a,
         type: 3}
@@ -1062,11 +1072,6 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Pivot.y
       value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 8618590246073884667, guid: c07ab423e975911498b5f2c4064d6acd,
-        type: 3}
-      propertyPath: m_AnchoredPosition.x
-      value: -6
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: c07ab423e975911498b5f2c4064d6acd, type: 3}

@@ -4,12 +4,13 @@ using UnityEngine;
 
 public class PlayerMovement : MonoBehaviour
 {
-    [SerializeField] private Transform _camSpace = default;
+    /*[SerializeField] private Transform _camSpace = default;*/
     [SerializeField] private float _rotSpeed = 2.0f;
     [SerializeField] private float _lookDist = 4.5f, looseRadius = 6.5f;
     [SerializeField] private Joystick _joystick = default;
+    [SerializeField] bool useKeyboard = default;
     public float _moveSpeed = 5.0f;
-    Vector3 _direccion = default, _lastdir = default;
+    Vector3 _direccion = default, _lastdir = default, _inputfinal = default;
     List<Lookable> misLookables;
     GameObject _currentLookGo;
     Lookable _currLook;
@@ -34,21 +35,21 @@ public class PlayerMovement : MonoBehaviour
     /// Small function that returns a normalized vector for input
     /// </summary>
     /// <returns>normalized Vector2</returns>
-    Vector3 InputsMovil() 
+    void InputsMovil() 
     {
-        Vector3 inputfinal = new Vector3(_joystick.Horizontal, 0, _joystick.Vertical);
-        return inputfinal;
+        _inputfinal = new Vector3(_joystick.Horizontal, 0, _joystick.Vertical);
     }
 
     /// <summary>
     /// Small function that returns a vector for input based on camSpace
     /// </summary>
     /// <returns>normalized Vector2</returns>
-    Vector3 InputsTeclas() 
+    void InputsTeclas() 
     {
-        Vector3 dire3D;
-        dire3D = new Vector3(Input.GetAxis("Horizontal"), 0, Input.GetAxis("Vertical"));
-        if (_camSpace) 
+
+        _inputfinal = new Vector3(Input.GetAxis("Horizontal"), 0, Input.GetAxis("Vertical"));
+        _inputfinal = Vector3.ClampMagnitude(_inputfinal, 1);
+        /*if (_camSpace) 
         {
             Vector3 forward = _camSpace.forward;
             forward.y = 0f;
@@ -59,16 +60,19 @@ public class PlayerMovement : MonoBehaviour
             
             dire3D = 
                 (forward * dire3D.z + right * dire3D.x);
-        }
-        
-        return Vector3.ClampMagnitude(dire3D,1);
+        }*/
     }
     #endregion
 
 
     private void Update() 
     {
-        _direccion = InputsMovil();
+        if(useKeyboard)
+            InputsTeclas();
+        else
+            InputsMovil();
+        
+        _direccion = _inputfinal;
         _lastdir = _direccion.sqrMagnitude > 0.01f ? _direccion : _lastdir;
 
         if (_currLook)

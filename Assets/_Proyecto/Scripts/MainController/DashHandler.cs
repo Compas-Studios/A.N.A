@@ -7,7 +7,7 @@ public class DashHandler : MonoBehaviour
 {
     [SerializeField] Renderer[] DashRenderers = default;
     [SerializeField] int dashModels = 5;
-    public float dashMaxDistance = 3f;
+    public float dashMaxDistance = 3f , timeBetwenDash = 1.2f;
     PlayerMovement playerMove;
     Vector3 newPos = default;
     Vector3 heading = default;
@@ -25,7 +25,7 @@ public class DashHandler : MonoBehaviour
     {
         playerMove = GetComponent<PlayerMovement>();
         _tr = transform;
-        seconds = new WaitForSeconds(0.9f);
+        seconds = new WaitForSeconds(timeBetwenDash);
         trailseconds = new WaitForSeconds(0.1f);
         propertyId = Shader.PropertyToID("_transitionValue");
         parentTransRend = new Transform[dashModels];

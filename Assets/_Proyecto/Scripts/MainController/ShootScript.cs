@@ -8,17 +8,25 @@ using System;
 public class ShootScript : MonoBehaviour, IDamageable
 {
     [SerializeField] float MaxHealth = 100;
+    [SerializeField] Animator shAnim = default;
     public Image healthImg, bckgndhealth, allHealth;
     public Transform puntoSpawn = default;
     public float shootDelay = 0.5f;
+    CamShake _cam = default;
 
     float health;
     ObjectPooler miPool = default;
     bool isShooting = false, canShoot = true, canDamage = true;
     WaitForSeconds shootSeconds, invinSeconds;
 
-    CamShake _cam = default;
+    [SerializeField] SpriteRenderer[] muzzleSpRend = default;
+    [SerializeField] Sprite[] sprites = default;
+    int muzzleLength, muzzleInd = 0;
 
+    private void Awake()
+    {
+        muzzleLength = sprites.Length;
+    }
 
     private void Start() 
     {
@@ -30,9 +38,18 @@ public class ShootScript : MonoBehaviour, IDamageable
         _cam = CamShake._staticShake;
     }
 
-    public void HoldDisparo() => isShooting = true;
+    public void HoldDisparo()
+    {
+        isShooting = true;
+        shAnim.SetBool("shoot",isShooting);
+    }
 
-    public void ReleaseDisparo() => isShooting = false;
+    public void ReleaseDisparo()
+    {
+        isShooting = false;
+        shAnim.SetBool("shoot", isShooting);
+        muzzleSpRend[0].sprite = muzzleSpRend[1].sprite = null;
+    }
 
     private void Update() 
     {
@@ -45,8 +62,13 @@ public class ShootScript : MonoBehaviour, IDamageable
         if (canShoot)    
         {
             canShoot = false;
+            muzzleInd++;
+            if (muzzleInd >= muzzleLength)
+                muzzleInd = 0;
+            muzzleSpRend[0].sprite = muzzleSpRend[1].sprite = sprites[muzzleInd];
             Bullet bullet = miPool.GetPooledObject("bullet").GetComponent<Bullet>();
-            bullet.Disparar(puntoSpawn.position, puntoSpawn.forward, 25f, false);
+            Vector3 variacion = puntoSpawn.right * UnityEngine.Random.Range(-0.5f, 0.5f);
+            bullet.Disparar(puntoSpawn.position + variacion, puntoSpawn.forward, 25f, false);
             StartCoroutine(waitToShoot());
         }
     }

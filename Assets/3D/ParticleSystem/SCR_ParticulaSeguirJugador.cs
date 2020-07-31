@@ -5,6 +5,7 @@ using UnityEngine;
 public class SCR_ParticulaSeguirJugador : MonoBehaviour
 {
     Transform bar;
+    [SerializeField] Vector3 offset = default;
     void Start()
     {
         bar = GameObject.Find("Player").transform;
@@ -12,6 +13,6 @@ public class SCR_ParticulaSeguirJugador : MonoBehaviour
 
     void Update()
     {
-        transform.position = new Vector3(bar.position.x, transform.position.y, bar.position.z);
+        transform.position = bar.position+offset;
     }
 }

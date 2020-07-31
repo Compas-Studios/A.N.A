@@ -3,13 +3,24 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
+using DG.Tweening;
 
 public class LevelLoadSystem : MonoBehaviour
 {
-    public Image pizarraSprite = default;
+    public Image pizarraSprite = default, loadImage = default;
     [SerializeField] string[] dialogo = default;
     [SerializeField] Sprite[] sprite = default;
     int indexMssg = 0;
+
+    private void Awake()
+    {
+        DontDestroyOnLoad(gameObject);
+    }
+
+    private void Start()
+    {
+        loadImage.DOFade(0, 1.0f);
+    }
 
     public void nextTexto()
     {
@@ -41,9 +52,16 @@ public class LevelLoadSystem : MonoBehaviour
         TextRevealer.txtInstance.MostrarTexto(dialogo[ind]);
     }
 
+    public void LoadCurrentLevel()
+    {
+        indexMssg++;
+        loadImage.DOFade(1, 1.0f).OnComplete(Startlevelcoroutine);
+    }
+
     public void LoadALevel(int sceneIndex)
     {
-        StartCoroutine(CargarEscena(sceneIndex));
+        indexMssg = sceneIndex;
+        loadImage.DOFade(1, 1.0f).OnComplete(Startlevelcoroutine);
     }
 
     IEnumerator CargarEscena(int _sceneInd)
@@ -53,5 +71,16 @@ public class LevelLoadSystem : MonoBehaviour
         {
             yield return null;
         }
+        loadImage.DOFade(0, 1.0f).OnComplete(DestroyMyself);
+    }
+
+    void Startlevelcoroutine()
+    {
+        StartCoroutine(CargarEscena(indexMssg));
+    }
+
+    public void DestroyMyself()
+    {
+        Destroy(gameObject);
     }
 }

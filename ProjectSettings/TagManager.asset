@@ -6,6 +6,7 @@ TagManager:
   tags:
   - bullet
   - DashModel
+  - bgndUI
   layers:
   - Default
   - TransparentFX
