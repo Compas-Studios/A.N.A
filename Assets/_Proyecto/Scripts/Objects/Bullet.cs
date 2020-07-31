@@ -34,6 +34,7 @@ public class Bullet : MonoBehaviour
         _tr.rotation = Quaternion.LookRotation(direccion);
         _rg.AddForce(direccion * vel, ForceMode.VelocityChange);
     }
+
     private void OnTriggerEnter(Collider other) 
     {
         IDamageable damageable = other.GetComponent<IDamageable>();

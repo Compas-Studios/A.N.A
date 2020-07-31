@@ -24,6 +24,7 @@ public class LouisBoss : MonoBehaviour, IDamageable
 
     private void Awake()
     {
+        health = maxHealth;
         _tr = transform.parent.parent;
         _trPlayer = FindObjectOfType<PlayerMovement>().transform;
 
@@ -35,7 +36,18 @@ public class LouisBoss : MonoBehaviour, IDamageable
     {
         _pool = ObjectPooler.SharedInstance;
         _target.parent = null;
-        health = maxHealth;
+        CanvasGroup cg = GameObject.FindGameObjectWithTag("bgndUI").GetComponent<CanvasGroup>();
+        if (cg != null)
+        {
+            cg.DOFade(1, 1.0f);
+            healthImg = cg.transform.GetChild(0).GetComponent<Image>();
+        }
+    }
+
+    private void OnEnable()
+    {
+        _pool = ObjectPooler.SharedInstance;
+        _target.parent = null;
         CanvasGroup cg = GameObject.FindGameObjectWithTag("bgndUI").GetComponent<CanvasGroup>();
         if (cg != null)
         {
@@ -81,7 +93,7 @@ public class LouisBoss : MonoBehaviour, IDamageable
     {
         _anim.SetTrigger("Attack");
         spRend.DOFade(1, 0.5f);
-        spRend.DOFade(0, 0.5f).SetDelay(1.1f);
+        spRend.DOFade(0, 1.0f).SetDelay(1.1f);
         Vector3 newPos = new Vector3(Random.Range(limitesXY.x, limitesXY.y), _tr.position.y, Random.Range(limitesXY.z, limitesXY.w));
         _target.DOMove(newPos, 0.2f).SetEase(Ease.OutExpo);
         _tr.DOLocalJump(newPos, 5f, 1, 0.15f, false).SetDelay(3.0f);
@@ -95,7 +107,32 @@ public class LouisBoss : MonoBehaviour, IDamageable
             StopAllCoroutines();
             _anim.SetTrigger("Dead");
             isAlive = false;
+            StartCoroutine(cargarNivel());
         }
+    }
+
+    public void TakeDmg(bool _enemie)
+    {
+        DOTween.To(UpdateMaterial, 0.75f, 0, 0.1f);
+
+        health -= 1;
+        if (health <= 0)
+        {
+            Morir();
+        }
+
+        float convertedvalue = health / maxHealth;
+
+        if (healthImg != null)
+        {
+            healthImg.DOFillAmount(convertedvalue, 0.01f).SetEase(Ease.InOutExpo);
+        }
+    }
+
+    void UpdateMaterial(float _t)
+    {
+        mtpb.SetFloat(matProperty, _t);
+        rend.SetPropertyBlock(mtpb);
     }
 
     IEnumerator waitTillNoBussy(float _t)
@@ -139,28 +176,10 @@ public class LouisBoss : MonoBehaviour, IDamageable
 
     }
 
-    public void TakeDmg(bool _enemie)
+    IEnumerator cargarNivel()
     {
-        DOTween.To(updateMaterial, 0.75f, 0, 0.1f);
-
-        health -= 1;
-        if (health <= 0)
-        {
-            Morir();
-        }
-
-        float convertedvalue = health / maxHealth;
-
-        if (healthImg != null)
-        {
-            healthImg.DOFillAmount(convertedvalue, 0.01f).SetEase(Ease.InOutExpo);
-        }
-    }
-
-    void updateMaterial(float _t)
-    {
-        mtpb.SetFloat(matProperty, _t);
-        rend.SetPropertyBlock(mtpb); 
+        yield return new WaitForSecondsRealtime(6.0f);
+        FindObjectOfType<LevelLoadSystem>().LoadALevel(0);
     }
 
     private void OnDrawGizmos()

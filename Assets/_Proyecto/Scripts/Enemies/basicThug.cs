@@ -11,6 +11,7 @@ public class basicThug : MonoBehaviour, IDamageable
     public float moveSpeed = 3.0f;
     public float detectRadius = 5.0f;
     public float secondsToShoot = 1.0f;
+    [HideInInspector] public DeathRoom mideathRoom = default;
     Vector3 endPos = Vector3.zero, direccion, _transPos, playerDirection;
     Transform _trans, _playerTrans;
     Rigidbody _rb;
@@ -115,9 +116,16 @@ public class basicThug : MonoBehaviour, IDamageable
 
     private void Die()
     {
+        NotifyDeath();
         life = maxLife;
         if (cam != null) cam.Shake(0.1f, 2.5f); //sacude la camara papi
         _trans.position = _trans.position + Vector3.up * 20.0f;
         gameObject.SetActive(false); //apagate
+    }
+
+    public void NotifyDeath()
+    {
+        if(mideathRoom!=null)
+        mideathRoom.EnemigoMuerto();
     }
 }

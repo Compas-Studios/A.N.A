@@ -111,7 +111,23 @@ public class ShootScript : MonoBehaviour, IDamageable
         if (_cam != null) _cam.Shake(0.2f, 5.0f);
     }
 
+    public void Heal(float amount)
+    {
+        health += amount;
+        if (health >= MaxHealth)
+            health = MaxHealth;
+
+        float convertedvalue = health / MaxHealth;
+
+        if (healthImg != null)
+        {
+            healthImg.DOFillAmount(convertedvalue, 0.1f).SetEase(Ease.InOutExpo);
+            bckgndhealth.DOFillAmount(convertedvalue, 1f).SetEase(Ease.InOutExpo);
+        }
+    }
+
     private void Die() {
-        //throw new NotImplementedException();
+        FindObjectOfType<LevelLoadSystem>().LoadALevel(0);
+        gameObject.SetActive(false);
     }
 }

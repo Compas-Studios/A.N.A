@@ -30,6 +30,12 @@ public class PlayerMovement : MonoBehaviour
         }
     }
 
+    public void updateLookables(List<Lookable> nuevosLookables)
+    {
+        foreach (var l in nuevosLookables)
+            misLookables.Add(l);
+    }
+
     #region GetInputs
     /// <summary>
     /// Small function that returns a normalized vector for input
